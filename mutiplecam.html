@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome file</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__html"><h4 id="home"><a href="http://motioncompass.info/">Home</a></h4>
+<h2 id="environment">Environment</h2>
+<p>Setup for network monitoring:</p>
+<ul>
+<li>
+<p>Amazon Blink XT2 Camera</p>
+</li>
+<li>
+<p>Netgear R6300 V2 Wireless AP (operating in 2.4 GHz mode)</p>
+</li>
+<li>
+<p>Cox network - Oklahoma</p>
+</li>
+<li>
+<p>Rooted Motorola Nexus 6</p>
+</li>
+<li>
+<p>Kali NetHunter ROM 2021.1</p>
+</li>
+<li>
+<p>Aircrack-ng 1.6</p>
+</li>
+</ul>
+<hr>
+<p>For multiple cameras, we manually adjust their fields of view and make them partially overlapped. We randomly change the location of each camera for every attempt.</p>
+<p>The camera location (coordinates) can be obtained by the Android app. We can then calculate the localization errors/time.</p>
+<p>For camera count &gt;= 2, we perform <code>MotionCompass</code> multiple times, each targeting a MAC.</p>
+<h2 id="result">Result</h2>
+<p>We output the localization time into csv format (txt) files and then use Python to do data processing. Here is the code we use to generate the results:</p>
+<p>For 1 camera:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">import</span>  csv
+<span class="token keyword">from</span>  statistics  <span class="token keyword">import</span>  mean
+<span class="token keyword">with</span>  <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'1cam.txt'</span><span class="token punctuation">,</span> newline<span class="token operator">=</span><span class="token string">''</span><span class="token punctuation">)</span> <span class="token keyword">as</span>  f<span class="token punctuation">:</span>
+reader <span class="token operator">=</span> csv<span class="token punctuation">.</span>reader<span class="token punctuation">(</span>f<span class="token punctuation">)</span>
+data <span class="token operator">=</span> <span class="token builtin">list</span><span class="token punctuation">(</span>reader<span class="token punctuation">)</span>
+<span class="token keyword">for</span>  i  <span class="token keyword">in</span>  <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token builtin">len</span><span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Min time of 1 camera is "</span><span class="token punctuation">,</span> <span class="token builtin">min</span><span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Max time of 1 camera is "</span><span class="token punctuation">,</span> <span class="token builtin">max</span><span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Average time of 1 camera is "</span><span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">(</span>mean<span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+<p>For 2 cameras:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">with</span>  <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'2cams.txt'</span><span class="token punctuation">,</span> newline<span class="token operator">=</span><span class="token string">''</span><span class="token punctuation">)</span> <span class="token keyword">as</span>  f<span class="token punctuation">:</span>
+reader <span class="token operator">=</span> csv<span class="token punctuation">.</span>reader<span class="token punctuation">(</span>f<span class="token punctuation">)</span>
+data <span class="token operator">=</span> <span class="token builtin">list</span><span class="token punctuation">(</span>reader<span class="token punctuation">)</span>
+<span class="token keyword">for</span>  i  <span class="token keyword">in</span>  <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token builtin">len</span><span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Min time of 2 cameras is "</span><span class="token punctuation">,</span> <span class="token builtin">min</span><span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Max time of 2 cameras is "</span><span class="token punctuation">,</span> <span class="token builtin">max</span><span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Average time of 2 cameras is "</span><span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">(</span>mean<span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+<p>For 3 cameras:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">with</span>  <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'3cams.txt'</span><span class="token punctuation">,</span> newline<span class="token operator">=</span><span class="token string">''</span><span class="token punctuation">)</span> <span class="token keyword">as</span>  f<span class="token punctuation">:</span>
+reader <span class="token operator">=</span> csv<span class="token punctuation">.</span>reader<span class="token punctuation">(</span>f<span class="token punctuation">)</span>
+data <span class="token operator">=</span> <span class="token builtin">list</span><span class="token punctuation">(</span>reader<span class="token punctuation">)</span>
+<span class="token keyword">for</span>  i  <span class="token keyword">in</span>  <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token builtin">len</span><span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Min time of 3 cameras is "</span><span class="token punctuation">,</span> <span class="token builtin">min</span><span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Max time of 3 cameras is "</span><span class="token punctuation">,</span> <span class="token builtin">max</span><span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Average time of 3 cameras is "</span><span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">(</span>mean<span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+<p>For 4 cameras:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">with</span>  <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'4cams.txt'</span><span class="token punctuation">,</span> newline<span class="token operator">=</span><span class="token string">''</span><span class="token punctuation">)</span> <span class="token keyword">as</span>  f<span class="token punctuation">:</span>
+reader <span class="token operator">=</span> csv<span class="token punctuation">.</span>reader<span class="token punctuation">(</span>f<span class="token punctuation">)</span>
+data <span class="token operator">=</span> <span class="token builtin">list</span><span class="token punctuation">(</span>reader<span class="token punctuation">)</span>
+<span class="token keyword">for</span>  i  <span class="token keyword">in</span>  <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token builtin">len</span><span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Min time of 4 cameras is "</span><span class="token punctuation">,</span> <span class="token builtin">min</span><span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Max time of 4 cameras is "</span><span class="token punctuation">,</span> <span class="token builtin">max</span><span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Average time of 4 cameras is "</span><span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">(</span>mean<span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+<p>For 5 cameras:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">with</span>  <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'5cams.txt'</span><span class="token punctuation">,</span> newline<span class="token operator">=</span><span class="token string">''</span><span class="token punctuation">)</span> <span class="token keyword">as</span>  f<span class="token punctuation">:</span>
+reader <span class="token operator">=</span> csv<span class="token punctuation">.</span>reader<span class="token punctuation">(</span>f<span class="token punctuation">)</span>
+data <span class="token operator">=</span> <span class="token builtin">list</span><span class="token punctuation">(</span>reader<span class="token punctuation">)</span>
+<span class="token keyword">for</span>  i  <span class="token keyword">in</span>  <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token builtin">len</span><span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Min time of 5 cameras is "</span><span class="token punctuation">,</span> <span class="token builtin">min</span><span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Max time of 5 cameras is "</span><span class="token punctuation">,</span> <span class="token builtin">max</span><span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Average time of 5 cameras is "</span><span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">(</span>mean<span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+<p>Output:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token punctuation">(</span>base<span class="token punctuation">)</span> yanhe@yans<span class="token operator">-</span>Mac<span class="token operator">-</span>mini multi<span class="token operator">-</span>camera <span class="token operator">%</span> <span class="token operator">/</span>usr<span class="token operator">/</span><span class="token builtin">bin</span><span class="token operator">/</span>python3 <span class="token operator">/</span>Users<span class="token operator">/</span>yanhe<span class="token operator">/</span>Documents<span class="token operator">/</span>Artif<span class="token operator">/</span>Python<span class="token operator">/</span>multi<span class="token operator">-</span>camera<span class="token operator">/</span>multicameraresult<span class="token punctuation">.</span>py
+
+Min time of <span class="token number">1</span> camera <span class="token keyword">is</span>  <span class="token number">126</span>
+Max time of <span class="token number">1</span> camera <span class="token keyword">is</span>  <span class="token number">149</span>
+Average time of <span class="token number">1</span> camera <span class="token keyword">is</span>  <span class="token number">132.32</span>
+Min time of <span class="token number">2</span> cameras <span class="token keyword">is</span>  <span class="token number">252</span>
+Max time of <span class="token number">2</span> cameras <span class="token keyword">is</span>  <span class="token number">295</span>
+Average time of <span class="token number">2</span> cameras <span class="token keyword">is</span>  <span class="token number">276.16</span>
+Min time of <span class="token number">3</span> cameras <span class="token keyword">is</span>  <span class="token number">368</span>
+Max time of <span class="token number">3</span> cameras <span class="token keyword">is</span>  <span class="token number">412</span>
+Average time of <span class="token number">3</span> cameras <span class="token keyword">is</span>  <span class="token number">386.96</span>
+Min time of <span class="token number">4</span> cameras <span class="token keyword">is</span>  <span class="token number">501</span>
+Max time of <span class="token number">4</span> cameras <span class="token keyword">is</span>  <span class="token number">559</span>
+Average time of <span class="token number">4</span> cameras <span class="token keyword">is</span>  <span class="token number">510.16</span>
+Min time of <span class="token number">5</span> cameras <span class="token keyword">is</span>  <span class="token number">609</span>
+Max time of <span class="token number">5</span> cameras <span class="token keyword">is</span>  <span class="token number">677</span>
+</code></pre>
+<p>We then obtain the following table (Table 3):<br>
+<img src="http://motioncompass.info/table3.png" alt="enter image description here"></p>
+<p>Download full program and data <a href="http://motioncompass.info/multi-camera.zip">zip</a></p>
+</div>
+</body>
+
+</html>

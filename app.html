@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>app</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__html"><h4 id="home"><a href="http://motioncompass.info/">Home</a></h4>
+<h2 id="motioncompass-app">MotionCompass App</h2>
+<h4 id="for-the-android-app-used-in-our-experiments-please-check-apk">For the Android app used in our experiments, please check <a href="http://motioncompass.info/apk.zip">APK</a></h4>
+<h2 id="requirement">Requirement</h2>
+<ol>
+<li>
+<p><strong><strong>Rooted</strong></strong> Android Devices with <a href="https://forum.xda-developers.com/t/app-2-2-root-wifi-reaver-gui-for-android.2456888/">WiFi Montior Mode</a> enabled</p>
+</li>
+<li>
+<p>Kali <a href="https://www.kali.org/docs/nethunter/">NetHunter</a> 2020.1 or later version ROM installed</p>
+</li>
+<li>
+<p><a href="https://busybox.net">BusyBox</a> 1.33.1 for Android system-level support</p>
+</li>
+<li>
+<p><strong><strong>Android 5.1.1</strong></strong> or later version</p>
+</li>
+<li>
+<p>Screen resolution: <strong><strong>1920 (L) x 1080 (W)</strong></strong></p>
+</li>
+<li>
+<p>Support libraries (including <a href="https://play.google.com/store/apps/details?id=stericson.busybox&amp;hl=el">busybox</a>, OUITABLE.TXT, aircrack-ng suite, mdk3, reaver, <a href="https://hewlettpackard.github.io/wireless-tools/Tools.html">wireless tools</a>, <a href="https://github.com/seemoo-lab/nexmon/tree/master/utilities/libfakeioctl">libfakeioctl.so</a>) should run on current OS command line</p>
+</li>
+</ol>
+<h2 id="modes">Modes</h2>
+<p>The app can automatically compute the user’s movement speed and the walking time for each motion path. The app currently has 2 operation modes: auto mode and manual mode.</p>
+<p>With <code>auto</code> mode: the app will scan for the hidden camera, find its MAC address, and then sniff the traffic associated with the MAC. When the user initiates walking, the app can determine when to start/stop (each motion path), calculate the corresponding distances, and finally give the results after performing walking along 3 motion paths.</p>
+<p>With <code>manual</code> mode, the user needs to monitor the traffic using other wireless traffic sniffing tools, e.g., aircrack-ng. The user need to manually start/stop walking motion paths according to the sniffing results. By inputing the parameters (distances) into the app, the app can then calculate the camera’s location.</p>
+<h3 id="auto-mode">Auto Mode</h3>
+<p>The auto mode uses SU library and <code>aircrack-ng</code> to provide a solution to pinpoint the wireless camera. The local dependencies listed in the “Requirement” section should be installed. Also, the phone should operate in the monitor mode. Click “Scan” to search for the MAC of the wireless camera; click “Start” to introduce motion; the localization result will be popped out when the three motion paths are generated. The app detects when the camera stops generating wireless traffic, so that the user can stop the current moth path accordingly.</p>
+<p>The following is an example of localization result:</p>
+<p><img src="http://motioncompass.info/appresult.JPG" width="480" 
+     height="800" alt="The localization result"></p>
+<h3 id="manual-mode">Manual Mode</h3>
+<p>In case that the employed wireless camera model has not been included in the design of the app, auto mode thus cannot get correct scanning results or returns no result, the user can then select manual mode. The following figure shows that the app detects no camera.</p>
+<p><img src="http://motioncompass.info/enterman.JPG" width="480" 
+     height="800" alt="Enter the manual mode if no camera found."></p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<h4 id="su-binary-not-found-error">1. SU binary not found error</h4>
+<p>MotionCompass needs root privilege. On startup, the app executes a <code>which su</code> command. If you get this message, this command fails. It expects a <code>su</code> binary file, which is a shell executed with root privileges. You may need to check the following items: check if you are rooted, or whether your root solution provides a <code>su</code> binary in a PATH accessible directory.</p>
+<h4 id="directory-result-could-not-be-created">2. Directory ‘result’ could not be created</h4>
+<p>This means that the app fails to create the <code>result</code> directory. This is usually because you are not given any permission at the beginning.</p>
+<h4 id="working-on-non-arm-android-devices">3. Working on non-ARM Android devices</h4>
+<p>This app is designed and tested for ARM devices. All included binaries and libraries are compiled for that architecture and may not work on anything else. If you get this message, you need to install the following packages in a PATH accessible directory manually, including <a href="https://play.google.com/store/apps/details?id=stericson.busybox&amp;hl=el">busybox</a>, aircrack-ng suite, mdk3, reaver, <a href="https://hewlettpackard.github.io/wireless-tools/Tools.html">wireless tools</a> and <a href="https://github.com/seemoo-lab/nexmon/tree/master/utilities/libfakeioctl">libfakeioctl.so</a> library. You also need to set the ‘Prefix’ option for the tools to preload the library they need, using <code>LD_PRELOAD=/path/to/libfakeioctl.so</code>.</p>
+<p>.</p>
+</div>
+</body>
+
+</html>
